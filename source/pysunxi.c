@@ -189,7 +189,7 @@ PyMethodDef module_methods[] = {
     {"input", py_input, METH_VARARGS, "Get input state"},
     {NULL, NULL, 0, NULL}
 };
-#if PY_MAJOR_VERSION >= 3
+
 static struct PyModuleDef module_def = {
     PyModuleDef_HEAD_INIT,
     "SUNXI module",
@@ -197,26 +197,15 @@ static struct PyModuleDef module_def = {
     -1,
     module_methods
 };
-#endif
-PyMODINIT_FUNC initSUNXI_GPIO(void) {
-    PyObject* module = NULL;
 
+PyMODINIT_FUNC PyInit_SUNXI_GPIO(void)
+{
 
-#if PY_MAJOR_VERSION >= 3
-    module = PyModule_Create(&module_methods);
-#else
-    module = Py_InitModule("SUNXI_GPIO", module_methods);
-#endif
+    PyObject *module;
 
+    module = PyModule_Create(&module_def);
 
-    if(module == NULL)
-#if PY_MAJOR_VERSION >= 3
-        return module;
-#else
-        return;
-#endif
-
-
+    sunxi_gpio_init();
 
     SetupException = PyErr_NewException("PySUNXI.SetupException", NULL, NULL);
     PyModule_AddObject(module, "SetupException", SetupException);
@@ -224,8 +213,6 @@ PyMODINIT_FUNC initSUNXI_GPIO(void) {
     PyModule_AddObject(module, "OutputException", OutputException);
     InputException = PyErr_NewException("PySUNXI.InputException", NULL, NULL);
     PyModule_AddObject(module, "InputException", InputException);
-
-
 
     high = Py_BuildValue("i", HIGH);
     PyModule_AddObject(module, "HIGH", high);
@@ -242,8 +229,6 @@ PyMODINIT_FUNC initSUNXI_GPIO(void) {
     per = Py_BuildValue("i", PER);
     PyModule_AddObject(module, "PER", per);
 
-
-
     PyModule_AddObject(module, "PD0", Py_BuildValue("i", PD0));
     PyModule_AddObject(module, "PD1", Py_BuildValue("i", PD1));
     PyModule_AddObject(module, "PD2", Py_BuildValue("i", PD2));
@@ -259,19 +244,13 @@ PyMODINIT_FUNC initSUNXI_GPIO(void) {
     PyModule_AddObject(module, "MOSI", Py_BuildValue("i", MOSI));
     PyModule_AddObject(module, "SCK", Py_BuildValue("i", SCK));
     PyModule_AddObject(module, "CS", Py_BuildValue("i", CS));
-    
+
     if(Py_AtExit(sunxi_gpio_cleanup) != 0){
-        
+
         sunxi_gpio_cleanup();
-        
-#if PY_MAJOR_VERSION >= 3
+
         return NULL;
-#else
-        return;
-#endif
     }
 
-
-
+    return module;
 }
-

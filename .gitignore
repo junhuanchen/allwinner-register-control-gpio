@@ -1,0 +1,5 @@
+source/pySUNXI.egg-info
+dist
+build
+*.pyc
+*.pyo

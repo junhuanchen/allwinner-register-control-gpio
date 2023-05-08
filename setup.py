@@ -2,10 +2,10 @@ from distutils.core import setup, Extension
 
 setup(
     name                = 'pySUNXI',
-    version             = '0.1.12',
-    author              = 'Stefan Mavrodiev',
-    author_email        = 'support@olimex.com',
-    url                 = 'https://www.olimex.com/',
+    version             = '0.2.0',
+    author              = 'juwan',
+    author_email        = 'junhuanchen@qq.com',
+    url                 = 'https://www.cnblogs.com/juwan',
     license             = 'MIT',
     description         = 'Control GPIOs on SUNXI soc.',
     long_description    = open('README.md').read() + open('CHANGES.txt').read(),
